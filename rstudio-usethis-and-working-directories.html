@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>15.2 Meeting Videos | R Packages Book Club</title>
+  <title>5.6 RStudio, usethis and working directories | R Packages Book Club</title>
   <meta name="description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="15.2 Meeting Videos | R Packages Book Club" />
+  <meta property="og:title" content="5.6 RStudio, usethis and working directories | R Packages Book Club" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="github-repo" content="r4ds/bookclub-rpkgs" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="15.2 Meeting Videos | R Packages Book Club" />
+  <meta name="twitter:title" content="5.6 RStudio, usethis and working directories | R Packages Book Club" />
   
   <meta name="twitter:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="slide-1-9.html"/>
-<link rel="next" href="installed-files.html"/>
+<link rel="prev" href="using-rstudio-projects.html"/>
+<link rel="next" href="test-driving-a-package.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -346,27 +346,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="meeting-videos-12" class="section level2 hasAnchor">
-<h2><span class="header-section-number">15.2</span> Meeting Videos<a href="meeting-videos-12.html#meeting-videos-12" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="cohort-1-12" class="section level3 hasAnchor">
-<h3><span class="header-section-number">15.2.1</span> Cohort 1<a href="meeting-videos-12.html#cohort-1-12" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<iframe src="https://www.youtube.com/embed/URL" width="100%" height="400px" data-external="1">
-</iframe>
-<details>
-<p><summary> Meeting chat log </summary></p>
-<pre><code>LOG</code></pre>
-</details>
-
+<div id="rstudio-usethis-and-working-directories" class="section level2 hasAnchor">
+<h2><span class="header-section-number">5.6</span> RStudio, <code>usethis</code> and working directories<a href="rstudio-usethis-and-working-directories.html#rstudio-usethis-and-working-directories" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><code>usethis</code> functions don’t take a path (i.e. <code>usethis::use_r("new_fx")</code>)</p>
+<p><code>usethis</code> assumes that the following coincide:</p>
+<ul>
+<li>The current RStudio Project.</li>
+<li>The active usethis project.</li>
+<li>Current working directory for the R process.</li>
+</ul>
+<p>It’s therefore much easier to not mess with your working directory for your R console. Leave it as the project directory so that when you’re calling functions from <code>usethis</code>, it puts things in the right place.</p>
+<p>You can double check that these three directories are coinciding by running:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="rstudio-usethis-and-working-directories.html#cb40-1"></a>usethis<span class="op">::</span><span class="kw">proj_sitrep</span>()</span></code></pre></div>
+<pre><code>## •   working_directory: &#39;/home/runner/work/bookclub-rpkgs/bookclub-rpkgs&#39;
+## • active_usethis_proj: &lt;unset&gt;
+## • active_rstudio_proj: &lt;unset&gt;
+## • There is currently no active usethis project.
+##   usethis attempts to activate a project upon first need.
+##   Call `proj_get()` to initiate project discovery.
+##   Call `proj_set(&quot;path/to/project&quot;)` or `proj_activate(&quot;path/to/project&quot;)` to provide
+##   an explicit path.</code></pre>
+<p>Similarly, when you run helper functions from devtools to develop your package (<code>document()</code>, <code>check()</code>, <code>test()</code>), these are also expecting your working directory to be the project directory. The also expect that your project follows the conventions of project structure (test scripts living in <code>tests/</code>, R code living in <code>R/</code>, vignettes living in <code>vignettes/</code> compiled code living in <code>src/</code>, images living in <code>man/figures/</code> etc).</p>
 </div>
-</div>
-<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="slide-1-9.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="installed-files.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="using-rstudio-projects.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="test-driving-a-package.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -397,7 +405,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/15.Rmd",
+"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/05-fundamental-development-workflows.Rmd",
 "text": "Edit"
 },
 "history": {

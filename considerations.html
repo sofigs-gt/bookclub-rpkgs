@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>15.2 Meeting Videos | R Packages Book Club</title>
+  <title>5.2 Considerations | R Packages Book Club</title>
   <meta name="description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="15.2 Meeting Videos | R Packages Book Club" />
+  <meta property="og:title" content="5.2 Considerations | R Packages Book Club" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="github-repo" content="r4ds/bookclub-rpkgs" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="15.2 Meeting Videos | R Packages Book Club" />
+  <meta name="twitter:title" content="5.2 Considerations | R Packages Book Club" />
   
   <meta name="twitter:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="slide-1-9.html"/>
-<link rel="next" href="installed-files.html"/>
+<link rel="prev" href="survey-the-existing-landscape.html"/>
+<link rel="next" href="naming-your-package.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -346,27 +346,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="meeting-videos-12" class="section level2 hasAnchor">
-<h2><span class="header-section-number">15.2</span> Meeting Videos<a href="meeting-videos-12.html#meeting-videos-12" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="cohort-1-12" class="section level3 hasAnchor">
-<h3><span class="header-section-number">15.2.1</span> Cohort 1<a href="meeting-videos-12.html#cohort-1-12" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<iframe src="https://www.youtube.com/embed/URL" width="100%" height="400px" data-external="1">
-</iframe>
-<details>
-<p><summary> Meeting chat log </summary></p>
-<pre><code>LOG</code></pre>
-</details>
-
+<div id="considerations" class="section level2 hasAnchor">
+<h2><span class="header-section-number">5.2</span> Considerations<a href="considerations.html#considerations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Ensure that the package fits in well within the domain of existing R packages.
+For modelling packages, using the <a href="https://hardhat.tidymodels.org/">hardhat</a> package helps the developer use best practices and ensures that the resulting package can be used within the tidymodels ecosystem (and get used more).</p>
+<p>You may also want to include consider including appropriate methods to be consistent with other related, packages. For example, many modelling packages have predict, plot, and summary methods, and users may expect this functionality from a new package that you create.</p>
 </div>
-</div>
-<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="slide-1-9.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="installed-files.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="survey-the-existing-landscape.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="naming-your-package.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -397,7 +389,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/15.Rmd",
+"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/05-fundamental-development-workflows.Rmd",
 "text": "Edit"
 },
 "history": {

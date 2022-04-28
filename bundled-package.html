@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 11 Vignettes: long-form documentation | R Packages Book Club</title>
+  <title>4.3 Bundled package | R Packages Book Club</title>
   <meta name="description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 11 Vignettes: long-form documentation | R Packages Book Club" />
+  <meta property="og:title" content="4.3 Bundled package | R Packages Book Club" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="github-repo" content="r4ds/bookclub-rpkgs" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 11 Vignettes: long-form documentation | R Packages Book Club" />
+  <meta name="twitter:title" content="4.3 Bundled package | R Packages Book Club" />
   
   <meta name="twitter:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="meeting-videos-7.html"/>
-<link rel="next" href="slide-1-6.html"/>
+<link rel="prev" href="source-package.html"/>
+<link rel="next" href="binary-package.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -328,20 +328,106 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="vignettes-long-form-documentation" class="section level1 hasAnchor">
-<h1><span class="header-section-number">Chapter 11</span> Vignettes: long-form documentation<a href="vignettes-long-form-documentation.html#vignettes-long-form-documentation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p><strong>Learning objectives:</strong></p>
+<div id="bundled-package" class="section level2 hasAnchor">
+<h2><span class="header-section-number">4.3</span> Bundled package<a href="bundled-package.html#bundled-package" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
-<li>THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY</li>
+<li>A <strong>bundled</strong> package is a package that’s been compressed into a single file</li>
+<li>By extension of Linux, <strong>source tarballs</strong> or <code>tar.gz</code> files
+<ul>
+<li>Implying, source files and directories have been archived using the tar utility
+<ul>
+<li><code>.tar</code> stands for <strong>T</strong>ape <strong>Ar</strong>chive</li>
+<li>creates one file out of many files (with some compression)</li>
+</ul></li>
+<li>The files are fully compressed using <code>gzip</code> or <em>GNU Zip</em>
+<ul>
+<li>gzip creates the <code>.gz</code> extension</li>
+</ul></li>
+</ul></li>
+<li>a <strong>bundled</strong> package is not source nor installed, but rather, an OS-agnostic storage medium</li>
 </ul>
+<p>If you need to bundle a package your developing, use <code>devtools::build()</code>.</p>
+<p><em>TLDR</em>: The <code>devtools::build()</code> calls <code>pkgbuild::build()</code> under the hood and ultimately <code>R CMD build</code>. For more information see <a href="https://cran.r-project.org/doc/manuals/R-exts.html#Building-package-tarballs">Building package tarballs</a>.</p>
+<p>All CRAN packages are available in <em>bundled</em> form and can be downloaded from their CRAN landing page.</p>
+<p>On Mac or Linux, run the following, from shell/terminal, to decompress and un-archive:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="bundled-package.html#cb28-1"></a><span class="fu">tar</span> xvf forcats_0.4.0.tar.gz</span></code></pre></div>
+<p>Quick explanation, you are calling on the <code>tar</code> utility. <code>-x</code> is <em>extract</em>, <code>-v</code> is <em>verbose</em> (show the output…makes you feel good to know something is happening), and <code>-f</code> is <em>filename</em>, uses the same filename as the archive.</p>
+<p>Windows users, I’m sorry, you’re going to have to use some type of utility like 7-Zip, WinZip, or WinRAR to decompress and un-archive. Windows does not have a native utility to accomplish this action. (Feel welcome to share your PowerShell examples if I’m incorrect).</p>
+<blockquote>
+<p>Note: A bit of research turns up, the <code>tar</code> utility was added to Windows 10, circa 2018. Earlier versions of Windows would require a third-party application.</p>
+</blockquote>
+<div class="figure"><span style="display:block;" id="fig:package-files"></span>
+<img src="images/04/package-files.png" alt="Side-by-side comparison of source, bundled, and binary package." width="100%" />
+<p class="caption">
+Figure 4.1: Side-by-side comparison of source, bundled, and binary package.
+</p>
+</div>
+<p>The main differences between a source package and an uncompressed bundle are:</p>
+<ul>
+<li><p>Vignettes have been built, so rendered outputs, such as HTML, appear below <code>inst/doc/</code> and a vignette index appears in the <code>build/</code> directory, usually alongside a PDF package manual.</p></li>
+<li><p>A local source package might contain temporary files used to save time during development, like compilation artifacts in <code>src/</code>. These are never found in a bundle.</p></li>
+<li><p>Any files listed in <code>.Rbuildignore</code> are not included in the bundle. These are typically files that facilitate your development process, but that should be excluded from the distributed product.</p></li>
+</ul>
+<div id="rbuildignore" class="section level3 hasAnchor">
+<h3><span class="header-section-number">4.3.1</span> .Rbuildignore<a href="bundled-package.html#rbuildignore" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>It is rare to contemplate the <code>.tar.gz</code> structure. However, it <strong><em>IS</em></strong> important to understand the <code>.Rbuildignore</code> file.</p>
+<ul>
+<li><code>Rbuildignore</code> controls which files from the source package make it into the downstream forms
+<ul>
+<li>The concept is similar to other <code>.*ignore</code> files.</li>
+<li>Exclude versus Include</li>
+</ul></li>
+<li>Each line of <code>.Rbuildignore</code> is a Perl-compatible regular expression
+<ul>
+<li>case insensitive</li>
+<li>if the regex matches, the file is excluded</li>
+</ul></li>
+<li>You must <strong>anchor</strong> the regular expression
+<ul>
+<li>for example <code>^notes$</code> will exclude any filename string containing <em>notes</em>.</li>
+</ul></li>
+<li>a less specific (or more automated method) is to use <code>usethis::use_build_ignore("notes")</code></li>
+</ul>
+<p><code>Rbuildignore</code> is a means to compromise your development environment with CRAN’s requirements.</p>
+<p>The affected files fall into two broad, semi-overlapping classes:</p>
+<ul>
+<li>Files that help you generate package contents programmatically. Examples:
+<ul>
+<li>Using README.Rmd to generate an informative and current README.md.</li>
+<li>Storing .R scripts to create and update internal or exported data.</li>
+</ul></li>
+<li>Files that drive package development, checking, and documentation, outside of CRAN’s purview. Examples:
+<ul>
+<li>Files relating to the RStudio IDE.</li>
+<li>Using the pkgdown package to generate a website.</li>
+<li>Configuration files related to continuous integration/deployment and monitoring test coverage.</li>
+</ul></li>
+</ul>
+<p>A non-exhaustive list of typical entries in the .Rbuildignore file</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="bundled-package.html#cb29-1"></a><span class="op">^</span>.<span class="op">*</span>\.Rproj<span class="op">$</span><span class="st">         </span><span class="co"># Designates the directory as an RStudio Project</span></span>
+<span id="cb29-2"><a href="bundled-package.html#cb29-2"></a><span class="er">^</span>\.Rproj\.user<span class="op">$</span><span class="st">     </span><span class="co"># Used by RStudio for temporary files</span></span>
+<span id="cb29-3"><a href="bundled-package.html#cb29-3"></a><span class="er">^</span>README\.Rmd<span class="op">$</span><span class="st">       </span><span class="co"># An Rmd file used to generate README.md</span></span>
+<span id="cb29-4"><a href="bundled-package.html#cb29-4"></a><span class="er">^</span>LICENSE\.md<span class="op">$</span><span class="st">       </span><span class="co"># Full text of the license</span></span>
+<span id="cb29-5"><a href="bundled-package.html#cb29-5"></a><span class="er">^</span>cran<span class="op">-</span>comments\.md<span class="op">$</span><span class="st"> </span><span class="co"># Comments for CRAN submission</span></span>
+<span id="cb29-6"><a href="bundled-package.html#cb29-6"></a><span class="er">^</span>data<span class="op">-</span>raw<span class="op">$</span><span class="st">          </span><span class="co"># Code used to create data included in the package</span></span>
+<span id="cb29-7"><a href="bundled-package.html#cb29-7"></a><span class="er">^</span>pkgdown<span class="op">$</span><span class="st">           </span><span class="co"># Resources used for the package website</span></span>
+<span id="cb29-8"><a href="bundled-package.html#cb29-8"></a><span class="er">^</span>_pkgdown\.yml<span class="op">$</span><span class="st">     </span><span class="co"># Configuration info for the package website</span></span>
+<span id="cb29-9"><a href="bundled-package.html#cb29-9"></a><span class="er">^</span>\.github<span class="op">$</span><span class="st">          </span><span class="co"># Contributing guidelines, CoC, issue templates, etc.</span></span></code></pre></div>
+<blockquote>
+<p>Note: The commmented text above should not be included in the <code>Rbuildignore</code> file and are only used for explination of each entry.</p>
+</blockquote>
+<blockquote>
+<p>Note: Remember that <code>usethis::use_build_ignore()</code> is an attractive way to manage this file.</p>
+</blockquote>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="meeting-videos-7.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="slide-1-6.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="source-package.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="binary-package.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -372,7 +458,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/11.Rmd",
+"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/04.Rmd",
 "text": "Edit"
 },
 "history": {

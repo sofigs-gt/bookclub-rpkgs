@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 11 Vignettes: long-form documentation | R Packages Book Club</title>
+  <title>3.1 Prepare your system | R Packages Book Club</title>
   <meta name="description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 11 Vignettes: long-form documentation | R Packages Book Club" />
+  <meta property="og:title" content="3.1 Prepare your system | R Packages Book Club" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="github-repo" content="r4ds/bookclub-rpkgs" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 11 Vignettes: long-form documentation | R Packages Book Club" />
+  <meta name="twitter:title" content="3.1 Prepare your system | R Packages Book Club" />
   
   <meta name="twitter:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="meeting-videos-7.html"/>
-<link rel="next" href="slide-1-6.html"/>
+<link rel="prev" href="system-setup.html"/>
+<link rel="next" href="devtools-usethis-and-you.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -328,11 +328,96 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="vignettes-long-form-documentation" class="section level1 hasAnchor">
-<h1><span class="header-section-number">Chapter 11</span> Vignettes: long-form documentation<a href="vignettes-long-form-documentation.html#vignettes-long-form-documentation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p><strong>Learning objectives:</strong></p>
+<div id="prepare-your-system" class="section level2 hasAnchor">
+<h2><span class="header-section-number">3.1</span> Prepare your system<a href="prepare-your-system.html#prepare-your-system" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To start the preparation of development environment, lets get our bearings.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="prepare-your-system.html#cb12-1"></a><span class="kw">R.Version</span>()</span></code></pre></div>
+<pre><code>## $platform
+## [1] &quot;x86_64-pc-linux-gnu&quot;
+## 
+## $arch
+## [1] &quot;x86_64&quot;
+## 
+## $os
+## [1] &quot;linux-gnu&quot;
+## 
+## $system
+## [1] &quot;x86_64, linux-gnu&quot;
+## 
+## $status
+## [1] &quot;&quot;
+## 
+## $major
+## [1] &quot;4&quot;
+## 
+## $minor
+## [1] &quot;1.2&quot;
+## 
+## $year
+## [1] &quot;2021&quot;
+## 
+## $month
+## [1] &quot;11&quot;
+## 
+## $day
+## [1] &quot;01&quot;
+## 
+## $`svn rev`
+## [1] &quot;81115&quot;
+## 
+## $language
+## [1] &quot;R&quot;
+## 
+## $version.string
+## [1] &quot;R version 4.1.2 (2021-11-01)&quot;
+## 
+## $nickname
+## [1] &quot;Bird Hippie&quot;</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="prepare-your-system.html#cb14-1"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
+<pre><code>## R version 4.1.2 (2021-11-01)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 20.04.4 LTS
+## 
+## Matrix products: default
+## BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
+## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
+## 
+## locale:
+##  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+##  [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+##  [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+## [10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] devtools_2.4.3 usethis_2.1.5 
+## 
+## loaded via a namespace (and not attached):
+##  [1] bslib_0.3.1       compiler_4.1.2    jquerylib_0.1.4   highr_0.9        
+##  [5] remotes_2.4.2     prettyunits_1.1.1 tools_4.1.2       testthat_3.1.4   
+##  [9] digest_0.6.29     pkgbuild_1.3.1    pkgload_1.2.4     jsonlite_1.8.0   
+## [13] evaluate_0.15     memoise_2.0.1     lifecycle_1.0.1   rlang_1.0.2      
+## [17] cli_3.3.0         rstudioapi_0.13   yaml_2.3.5        xfun_0.30        
+## [21] fastmap_1.1.0     withr_2.5.0       stringr_1.4.0     knitr_1.39       
+## [25] desc_1.4.1        fs_1.5.2          sass_0.4.1        rprojroot_2.0.3  
+## [29] glue_1.6.2        R6_2.5.1          processx_3.5.3    rmarkdown_2.14   
+## [33] bookdown_0.26     sessioninfo_1.2.2 purrr_0.3.4       callr_3.7.0      
+## [37] magrittr_2.0.3    ps_1.7.0          htmltools_0.5.2   ellipsis_0.3.2   
+## [41] stringi_1.7.6     cachem_1.0.6      crayon_1.5.1      brio_1.1.3</code></pre>
+<p>Ok, that was fun, but the version check isn’t in the book! We need to follow the author, right?</p>
+<p>Let’s load some packages to prepare authoring some packages!</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="prepare-your-system.html#cb16-1"></a><span class="kw">install.packages</span>(<span class="kw">c</span>(<span class="st">&quot;devtools&quot;</span>, <span class="st">&quot;roxygen2&quot;</span>, <span class="st">&quot;testthat&quot;</span>, <span class="st">&quot;knitr&quot;</span>))</span></code></pre></div>
+<blockquote>
+<p>NOTE: For some reason, this script caused an infinite loop of restart R, attempt to install, request to restart R, attempt to install…infinity. If this should happen, select <em>No</em>.</p>
+</blockquote>
+<p>The author recommends increasing to the <em>Preview</em> version of RStudio Integrated Development Environment (IDE). We are considering outselves developers, right?</p>
 <ul>
-<li>THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY</li>
+<li>Usually this isn’t needed or required for common users (we’re not common)</li>
+<li>It puts you in a position to be subject to bugs (not as many as the daily builds though)</li>
+<li><a href="https://www.rstudio.com/products/rstudio/download/preview/">Preview version</a></li>
+<li><a href="https://www.rstudio.com/products/rstudio/download/">Released version</a></li>
 </ul>
 </div>
             </section>
@@ -340,8 +425,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="meeting-videos-7.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="slide-1-6.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="system-setup.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="devtools-usethis-and-you.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -372,7 +457,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/11.Rmd",
+"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/03.Rmd",
 "text": "Edit"
 },
 "history": {

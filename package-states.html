@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 11 Vignettes: long-form documentation | R Packages Book Club</title>
+  <title>4.1 Package states | R Packages Book Club</title>
   <meta name="description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 11 Vignettes: long-form documentation | R Packages Book Club" />
+  <meta property="og:title" content="4.1 Package states | R Packages Book Club" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="github-repo" content="r4ds/bookclub-rpkgs" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 11 Vignettes: long-form documentation | R Packages Book Club" />
+  <meta name="twitter:title" content="4.1 Package states | R Packages Book Club" />
   
   <meta name="twitter:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="meeting-videos-7.html"/>
-<link rel="next" href="slide-1-6.html"/>
+<link rel="prev" href="package-structure-and-state.html"/>
+<link rel="next" href="source-package.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -328,20 +328,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="vignettes-long-form-documentation" class="section level1 hasAnchor">
-<h1><span class="header-section-number">Chapter 11</span> Vignettes: long-form documentation<a href="vignettes-long-form-documentation.html#vignettes-long-form-documentation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p><strong>Learning objectives:</strong></p>
+<div id="package-states" class="section level2 hasAnchor">
+<h2><span class="header-section-number">4.1</span> Package states<a href="package-states.html#package-states" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
-<li>THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY</li>
+<li>When you create or modify a package, you work on its <em>source code</em> or <em>source files</em></li>
+<li>You interact with the in-development package in its <strong>source</strong> form</li>
 </ul>
+<p>R Packages can be in five different states:</p>
+<ul>
+<li>source: Raw form, editable</li>
+<li>bundled: Compressed to a single archive file (.tar)</li>
+<li>binary: Compiled, OS Specific (Windows or Mac). It is implied Linux already has the ability to compile if required.</li>
+<li>installed: Decompressed into a package library</li>
+<li>in-memory: Explicitly referenced for use</li>
+</ul>
+<p>Function calls like <code>install.packages()</code> and <code>devtools::install_github()</code> move a package from source, bundled, or binary states into the installed state. Functions like <code>library()</code> bring your package into memory for immediate use.</p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="meeting-videos-7.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="slide-1-6.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="package-structure-and-state.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="source-package.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -372,7 +381,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/11.Rmd",
+"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/04.Rmd",
 "text": "Edit"
 },
 "history": {

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 11 Vignettes: long-form documentation | R Packages Book Club</title>
+  <title>3.2 devtools, usethis, and you | R Packages Book Club</title>
   <meta name="description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 11 Vignettes: long-form documentation | R Packages Book Club" />
+  <meta property="og:title" content="3.2 devtools, usethis, and you | R Packages Book Club" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="github-repo" content="r4ds/bookclub-rpkgs" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 11 Vignettes: long-form documentation | R Packages Book Club" />
+  <meta name="twitter:title" content="3.2 devtools, usethis, and you | R Packages Book Club" />
   
   <meta name="twitter:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="meeting-videos-7.html"/>
-<link rel="next" href="slide-1-6.html"/>
+<link rel="prev" href="prepare-your-system.html"/>
+<link rel="next" href="r-build-toolchain.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -328,20 +328,85 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="vignettes-long-form-documentation" class="section level1 hasAnchor">
-<h1><span class="header-section-number">Chapter 11</span> Vignettes: long-form documentation<a href="vignettes-long-form-documentation.html#vignettes-long-form-documentation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p><strong>Learning objectives:</strong></p>
+<div id="devtools-usethis-and-you" class="section level2 hasAnchor">
+<h2><span class="header-section-number">3.2</span> devtools, usethis, and you<a href="devtools-usethis-and-you.html#devtools-usethis-and-you" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>At some point in your development career…you will find you need to reorder to progress further. This is exactly what happened to the <code>{devtools}</code> package. In 2018, it was reordered and split into seven sub-packages:</p>
 <ul>
-<li>THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY</li>
+<li><code>{remotes}</code></li>
+<li><code>{pkgbuild}</code></li>
+<li><code>{pkgload}</code></li>
+<li><code>{rcmdcheck}</code></li>
+<li><code>{revdepcheck}</code></li>
+<li><code>{sessioninfo}</code></li>
+<li><code>{usethis}</code></li>
 </ul>
+<p>What is cool here, we already used one of these packages!!!</p>
+<p>You can think of devtools as a wrapper providing the ability to:</p>
+<ul>
+<li>set user-friendly defaults</li>
+<li>introduce helpful interactive behaviour</li>
+<li>combine functionality from multiple sub-packages</li>
+</ul>
+<p>There is a difference in useRs and developeRs. They are:</p>
+<ul>
+<li>useRs should attach devtools and think of it as the provider of your favorite functions for package development</li>
+<li>developeRs should <strong>NOT</strong> depend on devtools, but should instead access functions via the package that is their primary home
+<ul>
+<li>devtools should rarely appear in the role of <code>foo</code> in a qualified call of the form <code>foo::fcn()</code>. Instead, <code>foo</code> should be the package where <code>fcn()</code> is defined.</li>
+<li>An exception to this is that we continue to feature <code>devtools::install_github()</code> as the way to install the development version of a package in its README</li>
+</ul></li>
+<li>If required, ensure you report bugs to each sub-package</li>
+</ul>
+<p>Example of how to simulate installing and loading a package (interactive development)</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="devtools-usethis-and-you.html#cb17-1"></a><span class="kw">library</span>(devtools)</span>
+<span id="cb17-2"><a href="devtools-usethis-and-you.html#cb17-2"></a><span class="kw">load_all</span>()</span></code></pre></div>
+<pre><code>## ℹ Loading bookclub-rpkgs</code></pre>
+<p>If used inside an R package, this is the preferred call:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="devtools-usethis-and-you.html#cb19-1"></a>pkgload<span class="op">::</span><span class="kw">load_all</span>()</span></code></pre></div>
+<pre><code>## ℹ Loading bookclub-rpkgs</code></pre>
+<div id="personal-startup-configuration" class="section level3 hasAnchor">
+<h3><span class="header-section-number">3.2.1</span> Personal startup configuration<a href="devtools-usethis-and-you.html#personal-startup-configuration" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Attach devtools with the following script:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="devtools-usethis-and-you.html#cb21-1"></a><span class="kw">library</span>(devtools)</span></code></pre></div>
+<p>Doing this everytime you restart your session gets old…quick! Lets be more efficient with our keystrokes.</p>
+<p>Let’s edit our <code>.Rprofile</code> file. If it does not exist on your computer, you can run <code>use_devtools()</code> to create it.</p>
+<p>The output of my command looks like this:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="devtools-usethis-and-you.html#cb22-1"></a><span class="kw">use_devtools</span>()</span>
+<span id="cb22-2"><a href="devtools-usethis-and-you.html#cb22-2"></a>• Include this code <span class="cf">in</span> <span class="st">&#39;.Rprofile&#39;</span> to make devtools available <span class="cf">in</span> all interactive sessions.</span>
+<span id="cb22-3"><a href="devtools-usethis-and-you.html#cb22-3"></a>  <span class="cf">if</span> (<span class="kw">interactive</span>()) {</span>
+<span id="cb22-4"><a href="devtools-usethis-and-you.html#cb22-4"></a>    <span class="kw">suppressMessages</span>(<span class="kw">require</span>(devtools))</span>
+<span id="cb22-5"><a href="devtools-usethis-and-you.html#cb22-5"></a>  }</span>
+<span id="cb22-6"><a href="devtools-usethis-and-you.html#cb22-6"></a>  [Copied to clipboard]</span>
+<span id="cb22-7"><a href="devtools-usethis-and-you.html#cb22-7"></a>• Modify <span class="st">&#39;/Users/rmetcalf/.Rprofile&#39;</span></span>
+<span id="cb22-8"><a href="devtools-usethis-and-you.html#cb22-8"></a>• Restart R <span class="cf">for</span> changes to take effect</span></code></pre></div>
+<p>Caution, Warning, HUGE RED FLAG!!!! You are not a Super-person yet!</p>
+<p>In general, it’s a bad idea to attach packages in .Rprofile, as it invites you to create R scripts that don’t reflect all of their dependencies via explicit calls to library(foo). But devtools is a workflow package that smooths the process of package development and is, therefore, unlikely to get baked into any analysis scripts.</p>
+<blockquote>
+<p>Note how we still take care to only attach in interactive sessions.</p>
+</blockquote>
+<p>I may be too harsh. The following is a good example when <code>usethis</code> helps and can be added to your .Rprofile.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="devtools-usethis-and-you.html#cb23-1"></a><span class="kw">options</span>(</span>
+<span id="cb23-2"><a href="devtools-usethis-and-you.html#cb23-2"></a>  <span class="dt">usethis.full_name =</span> <span class="st">&quot;Jane Doe&quot;</span>,</span>
+<span id="cb23-3"><a href="devtools-usethis-and-you.html#cb23-3"></a>  <span class="dt">usethis.description =</span> <span class="kw">list</span>(</span>
+<span id="cb23-4"><a href="devtools-usethis-and-you.html#cb23-4"></a>    <span class="st">`</span><span class="dt">Authors@R</span><span class="st">`</span> =<span class="st"> &#39;person(&quot;Jane&quot;, &quot;Doe&quot;, email = &quot;jane@example.com&quot;, role = c(&quot;aut&quot;, &quot;cre&quot;)), </span></span>
+<span id="cb23-5"><a href="devtools-usethis-and-you.html#cb23-5"></a><span class="st">    comment = c(ORCID = &quot;YOUR-ORCID-ID&quot;))&#39;</span>,</span>
+<span id="cb23-6"><a href="devtools-usethis-and-you.html#cb23-6"></a>    <span class="dt">License =</span> <span class="st">&quot;MIT + file LICENSE&quot;</span>,</span>
+<span id="cb23-7"><a href="devtools-usethis-and-you.html#cb23-7"></a>    <span class="dt">Version =</span> <span class="st">&quot;0.0.0.9000&quot;</span></span>
+<span id="cb23-8"><a href="devtools-usethis-and-you.html#cb23-8"></a>  ),</span>
+<span id="cb23-9"><a href="devtools-usethis-and-you.html#cb23-9"></a>  <span class="dt">usethis.protocol  =</span> <span class="st">&quot;ssh&quot;</span>  </span>
+<span id="cb23-10"><a href="devtools-usethis-and-you.html#cb23-10"></a>)</span></code></pre></div>
+<p>For history purposes (or at some point it may change….)</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="devtools-usethis-and-you.html#cb24-1"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;r-lib/devtools&quot;</span>)</span>
+<span id="cb24-2"><a href="devtools-usethis-and-you.html#cb24-2"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;r-lib/usethis&quot;</span>)</span></code></pre></div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="meeting-videos-7.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="slide-1-6.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="prepare-your-system.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="r-build-toolchain.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -372,7 +437,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/11.Rmd",
+"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/03.Rmd",
 "text": "Edit"
 },
 "history": {

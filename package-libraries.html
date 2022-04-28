@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 11 Vignettes: long-form documentation | R Packages Book Club</title>
+  <title>4.7 Package libraries | R Packages Book Club</title>
   <meta name="description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 11 Vignettes: long-form documentation | R Packages Book Club" />
+  <meta property="og:title" content="4.7 Package libraries | R Packages Book Club" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="github-repo" content="r4ds/bookclub-rpkgs" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 11 Vignettes: long-form documentation | R Packages Book Club" />
+  <meta name="twitter:title" content="4.7 Package libraries | R Packages Book Club" />
   
   <meta name="twitter:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="meeting-videos-7.html"/>
-<link rel="next" href="slide-1-6.html"/>
+<link rel="prev" href="in-memory-package.html"/>
+<link rel="next" href="fundamental-development-workflows.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -328,20 +328,78 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="vignettes-long-form-documentation" class="section level1 hasAnchor">
-<h1><span class="header-section-number">Chapter 11</span> Vignettes: long-form documentation<a href="vignettes-long-form-documentation.html#vignettes-long-form-documentation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p><strong>Learning objectives:</strong></p>
+<div id="package-libraries" class="section level2 hasAnchor">
+<h2><span class="header-section-number">4.7</span> Package libraries<a href="package-libraries.html#package-libraries" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When calling <code>library(foo)</code>, R looks through the current libraries for an installed package <em>foo</em>, and if successful, makes it available.</p>
+<blockquote>
+<p>Definition: <strong>Library</strong>: is a directory containing installed packages.</p>
+</blockquote>
+<blockquote>
+<p>Definition: <strong>Packages</strong>: are functional instructions to process information.</p>
+</blockquote>
 <ul>
-<li>THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY</li>
+<li>These terms are often misused and reinforced within our vernacular (language dictionary).</li>
 </ul>
+<blockquote>
+<p>We use the <code>library()</code> function to load a <strong>package</strong>.</p>
+</blockquote>
+<ul>
+<li><p>As package prospect R Package Developers, it is a good idea to set the distinction between <strong>library</strong> and <strong>package</strong> early</p></li>
+<li><p>To see <code>.libPaths()</code> on Windows, use the following function call:</p></li>
+</ul>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="package-libraries.html#cb38-1"></a><span class="kw">.libPaths</span>()</span>
+<span id="cb38-2"><a href="package-libraries.html#cb38-2"></a></span>
+<span id="cb38-3"><a href="package-libraries.html#cb38-3"></a><span class="kw">lapply</span>(<span class="kw">.libPaths</span>(), list.dirs, <span class="dt">recursive =</span> <span class="ot">FALSE</span>, <span class="dt">full.names =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<ul>
+<li>To see `.libPaths() on macOS, use the following function call:</li>
+</ul>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="package-libraries.html#cb39-1"></a><span class="kw">.libPaths</span>()</span>
+<span id="cb39-2"><a href="package-libraries.html#cb39-2"></a></span>
+<span id="cb39-3"><a href="package-libraries.html#cb39-3"></a><span class="kw">lapply</span>(<span class="kw">.libPaths</span>(), list.dirs, <span class="dt">recursive =</span> <span class="ot">FALSE</span>, <span class="dt">full.names =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<blockquote>
+<p>NOTE TO SELF…THESE ARE THE SAME CALLS</p>
+</blockquote>
+<p>Considering the output, we view two things:</p>
+<ol style="list-style-type: decimal">
+<li>A user library</li>
+<li>A system-level or global library</li>
+</ol>
+<p>A user library is typical for a Windows installation, but an <em>opt-in</em> for Mac Users. Depending on your development environment the idea would mean, I can delete my user packages but maintain my base R installation. <em>(Lets discuss this for a moment)</em>.</p>
+<p>If you’re on macOS and only see one library, there is no urgent need to change anything. But next time you upgrade R, consider creating a user-level library. By default, R looks for a user library found at the path stored in the environment variable <code>R_LIBS_USER</code>, which itself defaults to <code>~/Library/R/x.y/library</code>. When you install, <code>R x.y.z</code> and prior to installing any add-on packages, use <code>dir.create("~/Library/R/x.y/library")</code> to set up a user library. Now you will have the library setup seen above. Alternatively, you could setup a user library elsewhere and tell R about that by setting the <code>R_LIBS_USER</code> environment variable in <code>.Renviron</code>.</p>
+<ul>
+<li>In is implied you need to re-install user packages for a minor version of R. (3.5.0 to 3.6.0). You generally do not require this for a patch release (3.6.0 to 3.6.1).</li>
+</ul>
+<blockquote>
+<p>NOTE: The x.y.z reference previously can also be read as <em>major.minor.patch</em> and is common within software engineering.</p>
+</blockquote>
+<ul>
+<li><p>As we grow and become more sophisticated, our management of packages will become more intricate.</p></li>
+<li><p>Examples like <code>renv</code> and its predecessor <code>packrat()</code> automate the process of managing project-specific libraries</p>
+<ul>
+<li>An example woudl be loading specific versions of an environment to test forward and backward compatibility</li>
+<li>Reverse dependency checks are another example of managing the library search path</li>
+</ul></li>
+</ul>
+<p>The main levers that control which libraries are active:</p>
+<ul>
+<li>Environment variables, like <code>R_LIBS</code> and <code>R_LIBS_USER</code>, which are consulted at startup</li>
+<li>Calling <code>.libPaths()</code> with one or more filepaths</li>
+<li>Executing small snippets of code with a temporarily altered library search path via <code>withr::with_libpaths()</code></li>
+<li>Arguments to individual functions, like <code>install.packages(lib =)</code> and <code>library(lib.loc =)</code>.</li>
+</ul>
+<blockquote>
+<p>NOTE: <code>library()</code> should NEVER be used inside a package. There are other mechinisims for declaring dependencies. We’ll discuss this more in chapter 13.</p>
+</blockquote>
+
 </div>
+<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="meeting-videos-7.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="slide-1-6.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="in-memory-package.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="fundamental-development-workflows.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -372,7 +430,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/11.Rmd",
+"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/04.Rmd",
 "text": "Edit"
 },
 "history": {

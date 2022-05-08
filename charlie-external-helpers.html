@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 9 Licensing | R Packages Book Club</title>
+  <title>6.3 Charlie: external helpers | R Packages Book Club</title>
   <meta name="description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 9 Licensing | R Packages Book Club" />
+  <meta property="og:title" content="6.3 Charlie: external helpers | R Packages Book Club" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="github-repo" content="r4ds/bookclub-rpkgs" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 9 Licensing | R Packages Book Club" />
+  <meta name="twitter:title" content="6.3 Charlie: external helpers | R Packages Book Club" />
   
   <meta name="twitter:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="meeting-videos-5.html"/>
-<link rel="next" href="slide-1-2.html"/>
+<link rel="prev" href="bravo-a-better-script-that-works.html"/>
+<link rel="next" href="delta-an-attempt-at-a-package.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -352,20 +352,62 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="licensing" class="section level1 hasAnchor">
-<h1><span class="header-section-number">Chapter 9</span> Licensing<a href="licensing.html#licensing" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p><strong>Learning objectives:</strong></p>
+<div id="charlie-external-helpers" class="section level2 hasAnchor">
+<h2><span class="header-section-number">6.3</span> Charlie: external helpers<a href="charlie-external-helpers.html#charlie-external-helpers" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Move reusable data and logic out of the analysis script and into separate files.</p>
+<pre><code>library(tidyverse)
+
+localize_beach &lt;- function(dat) {
+  lookup_table &lt;- read_csv(
+    &quot;beach-lookup-table.csv&quot;,
+    col_types = cols(where = &quot;c&quot;, english = &quot;c&quot;)
+  )
+  left_join(dat, lookup_table)
+}
+
+f_to_c &lt;- function(x) (x - 32) * 5/9
+
+celsify_temp &lt;- function(dat) {
+  mutate(dat, temp = if_else(english == &quot;US&quot;, f_to_c(temp), temp))
+}
+
+now &lt;- Sys.time()
+timestamp &lt;- function(time) format(time, &quot;%Y-%B-%d_%H-%M-%S&quot;)
+outfile_path &lt;- function(infile) {
+  paste0(timestamp(now), &quot;_&quot;, sub(&quot;(.*)([.]csv$)&quot;, &quot;\\1_clean\\2&quot;, infile))
+}</code></pre>
 <ul>
-<li>THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY</li>
+<li>High-level helper functions like localize_beach() and celsify_temp(), were added to the pre-existing helpers (f_to_c(), timestamp(), and outfile_path())</li>
 </ul>
+<pre><code>library(tidyverse)
+source(&quot;cleaning-helpers.R&quot;)
+
+infile &lt;- &quot;swim.csv&quot;
+dat &lt;- read_csv(infile, col_types = cols(name = &quot;c&quot;, where = &quot;c&quot;, temp = &quot;d&quot;))
+
+(dat &lt;- dat %&gt;% 
+    localize_beach() %&gt;% 
+    celsify_temp())
+#&gt; Joining, by = &quot;where&quot;
+#&gt; # A tibble: 5 × 4
+#&gt;   name  where     temp english
+#&gt;   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;  
+#&gt; 1 Adam  beach     35   US     
+#&gt; 2 Bess  coast     32.8 US     
+#&gt; 3 Cora  seashore  28   UK     
+#&gt; 4 Dale  beach     29.4 US     
+#&gt; 5 Evan  seaside   31   UK
+
+write_csv(dat, outfile_path(infile))</code></pre>
+<p>Script is now much shorter (and cleaner). However, whether it’s easier depends on personal preference and what “feels” easier to work with.</p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="meeting-videos-5.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="slide-1-2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="bravo-a-better-script-that-works.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="delta-an-attempt-at-a-package.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -396,7 +438,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/09.Rmd",
+"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/06-the-package-within.Rmd",
 "text": "Edit"
 },
 "history": {

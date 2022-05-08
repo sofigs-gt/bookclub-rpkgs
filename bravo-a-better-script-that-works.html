@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 9 Licensing | R Packages Book Club</title>
+  <title>6.2 Bravo: a better script that works | R Packages Book Club</title>
   <meta name="description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 9 Licensing | R Packages Book Club" />
+  <meta property="og:title" content="6.2 Bravo: a better script that works | R Packages Book Club" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="github-repo" content="r4ds/bookclub-rpkgs" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 9 Licensing | R Packages Book Club" />
+  <meta name="twitter:title" content="6.2 Bravo: a better script that works | R Packages Book Club" />
   
   <meta name="twitter:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="meeting-videos-5.html"/>
-<link rel="next" href="slide-1-2.html"/>
+<link rel="prev" href="alfa-a-script-that-works.html"/>
+<link rel="next" href="charlie-external-helpers.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -352,11 +352,57 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="licensing" class="section level1 hasAnchor">
-<h1><span class="header-section-number">Chapter 9</span> Licensing<a href="licensing.html#licensing" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p><strong>Learning objectives:</strong></p>
+<div id="bravo-a-better-script-that-works" class="section level2 hasAnchor">
+<h2><span class="header-section-number">6.2</span> Bravo: a better script that works<a href="bravo-a-better-script-that-works.html#bravo-a-better-script-that-works" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
-<li>THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY</li>
+<li>There’s a package that lurks within the original script (apparently)
+<ul>
+<li>Suboptimal coding practices like repetitive code and mixing of code and data</li>
+</ul></li>
+</ul>
+<p>Next version of the script:</p>
+<pre><code>library(tidyverse)
+
+infile &lt;- &quot;swim.csv&quot;
+dat &lt;- read_csv(infile, col_types = cols(name = &quot;c&quot;, where = &quot;c&quot;, temp = &quot;d&quot;))
+
+lookup_table &lt;- tribble(
+      ~where, ~english,
+     &quot;beach&quot;,     &quot;US&quot;,
+     &quot;coast&quot;,     &quot;US&quot;,
+  &quot;seashore&quot;,     &quot;UK&quot;,
+   &quot;seaside&quot;,     &quot;UK&quot;
+)
+
+dat &lt;- dat %&gt;% 
+  left_join(lookup_table)
+#&gt; Joining, by = &quot;where&quot;
+
+f_to_c &lt;- function(x) (x - 32) * 5/9
+
+dat &lt;- dat %&gt;% 
+  mutate(temp = if_else(english == &quot;US&quot;, f_to_c(temp), temp))
+dat
+#&gt; # A tibble: 5 × 4
+#&gt;   name  where     temp english
+#&gt;   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;  
+#&gt; 1 Adam  beach     35   US     
+#&gt; 2 Bess  coast     32.8 US     
+#&gt; 3 Cora  seashore  28   UK     
+#&gt; 4 Dale  beach     29.4 US     
+#&gt; 5 Evan  seaside   31   UK
+
+now &lt;- Sys.time()
+timestamp &lt;- function(time) format(time, &quot;%Y-%B-%d_%H-%M-%S&quot;)
+outfile_path &lt;- function(infile) {
+  paste0(timestamp(now), &quot;_&quot;, sub(&quot;(.*)([.]csv$)&quot;, &quot;\\1_clean\\2&quot;, infile))
+}
+write_csv(dat, outfile_path(infile))</code></pre>
+<p><strong>Key features of this code:</strong></p>
+<ul>
+<li>using functions from tidyverse packages</li>
+<li>different “beach” words are stored in a lookup table. This makes it easier to add words in the future.</li>
+<li><code>f_to_c()</code>, <code>timestamp()</code>, and <code>outfile_path()</code> functions now hold the logic for converting temperatures and forming the timestamped output file name.</li>
 </ul>
 </div>
             </section>
@@ -364,8 +410,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="meeting-videos-5.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="slide-1-2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="alfa-a-script-that-works.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="charlie-external-helpers.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -396,7 +442,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/09.Rmd",
+"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/06-the-package-within.Rmd",
 "text": "Edit"
 },
 "history": {

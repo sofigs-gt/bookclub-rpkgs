@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 9 Licensing | R Packages Book Club</title>
+  <title>6.4 Delta: an attempt at a package | R Packages Book Club</title>
   <meta name="description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 9 Licensing | R Packages Book Club" />
+  <meta property="og:title" content="6.4 Delta: an attempt at a package | R Packages Book Club" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="github-repo" content="r4ds/bookclub-rpkgs" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 9 Licensing | R Packages Book Club" />
+  <meta name="twitter:title" content="6.4 Delta: an attempt at a package | R Packages Book Club" />
   
   <meta name="twitter:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="meeting-videos-5.html"/>
-<link rel="next" href="slide-1-2.html"/>
+<link rel="prev" href="charlie-external-helpers.html"/>
+<link rel="next" href="echo-a-working-package.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -352,11 +352,89 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="licensing" class="section level1 hasAnchor">
-<h1><span class="header-section-number">Chapter 9</span> Licensing<a href="licensing.html#licensing" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p><strong>Learning objectives:</strong></p>
+<div id="delta-an-attempt-at-a-package" class="section level2 hasAnchor">
+<h2><span class="header-section-number">6.4</span> Delta: an attempt at a package<a href="delta-an-attempt-at-a-package.html#delta-an-attempt-at-a-package" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
-<li>THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY</li>
+<li>Use usethis::create_package() to scaffold a new R package</li>
+<li>Copy cleaning-helpers.R into the new package, specifically, to R/cleaning-helpers.R</li>
+<li>Copy beach-lookup-table.csv into the top-level of the new source package</li>
+<li>install package</li>
+</ul>
+<p>Script we’re trying to run:</p>
+<pre><code>library(tidyverse)
+library(delta) # originally source(&quot;cleaning-helpers.R&quot;)
+
+infile &lt;- &quot;swim.csv&quot;
+dat &lt;- read_csv(infile, col_types = cols(name = &quot;c&quot;, where = &quot;c&quot;, temp = &quot;d&quot;))
+
+dat &lt;- dat %&gt;% 
+  localize_beach() %&gt;% 
+  celsify_temp()
+
+write_csv(dat, outfile_path(infile))</code></pre>
+<p>Results when we try to run this code:</p>
+<pre><code>library(tidyverse)
+library(delta)
+
+infile &lt;- &quot;swim.csv&quot;
+dat &lt;- read_csv(infile, col_types = cols(name = &quot;c&quot;, where = &quot;c&quot;, temp = &quot;d&quot;))
+
+dat &lt;- dat %&gt;% 
+  localize_beach() %&gt;% 
+  celsify_temp()
+&gt; Error in localize_beach(.) : could not find function &quot;localize_beach&quot;
+
+write_csv(dat, outfile_path(infile))
+&gt; Error in outfile_path(infile) : could not find function &quot;outfile_path&quot;</code></pre>
+<p>Despite calling our library(delta), none of the functions were actually available to use.</p>
+<ul>
+<li>This is because we only attached the package, rather than sourcing the file with helper functions.
+<ul>
+<li>Attaching a package does not put the functions in the global workspace.
+<ul>
+<li>We can export these functions properly by putting <code>@export</code> in the roxygen comment above each function</li>
+</ul></li>
+</ul></li>
+</ul>
+<pre><code>#&#39; @export
+celsify_temp &lt;- function(dat) {
+  mutate(dat, temp = if_else(english == &quot;US&quot;, f_to_c(temp), temp))
+}</code></pre>
+<p>Now our script works (sort of)!</p>
+<pre><code>library(tidyverse)
+library(delta)
+
+infile &lt;- &quot;swim.csv&quot;
+dat &lt;- read_csv(infile, col_types = cols(name = &quot;c&quot;, where = &quot;c&quot;, temp = &quot;d&quot;))
+
+dat &lt;- dat %&gt;% 
+  localize_beach() %&gt;% 
+  celsify_temp()
+#&gt; Error: &#39;beach-lookup-table.csv&#39; does not exist in current working directory (&#39;/Users/jenny/tmp&#39;).
+
+write_csv(dat, outfile_path(infile))</code></pre>
+<p>Problem: You can’t dump CSV files into the source of an R package and expect it to work. Despite this, you can still install and attach this package.</p>
+<ul>
+<li>This means that broken packages can still be used. To prevent this, you should run <code>R CMD</code> check or <code>check()</code> often during development.
+<ul>
+<li>Doing so will alert you to the problem:</li>
+</ul></li>
+</ul>
+<pre><code>* installing *source* package ‘delta’ ...
+** using staged installation
+** R
+** byte-compile and prepare package for lazy loading
+Error in library(tidyverse) : there is no package called ‘tidyverse’
+Error: unable to load R code in package ‘delta’
+Execution halted
+ERROR: lazy loading failed for package ‘delta’
+* removing ‘/Users/brendan/RScripts/delta.Rcheck/delta’</code></pre>
+<p>What are the reasons behing these errors?</p>
+<ul>
+<li>Package was declared incorrectly
+<ul>
+<li>While you can load a package using <code>library(tidyverse)</code> in a script, dependencies on other packages must be declared in the <code>DESCRIPTION</code></li>
+</ul></li>
 </ul>
 </div>
             </section>
@@ -364,8 +442,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="meeting-videos-5.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="slide-1-2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="charlie-external-helpers.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="echo-a-working-package.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -396,7 +474,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/09.Rmd",
+"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/06-the-package-within.Rmd",
 "text": "Edit"
 },
 "history": {

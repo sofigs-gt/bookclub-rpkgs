@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 9 Licensing | R Packages Book Club</title>
+  <title>6.5 Echo: a working package | R Packages Book Club</title>
   <meta name="description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 9 Licensing | R Packages Book Club" />
+  <meta property="og:title" content="6.5 Echo: a working package | R Packages Book Club" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="github-repo" content="r4ds/bookclub-rpkgs" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 9 Licensing | R Packages Book Club" />
+  <meta name="twitter:title" content="6.5 Echo: a working package | R Packages Book Club" />
   
   <meta name="twitter:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="meeting-videos-5.html"/>
-<link rel="next" href="slide-1-2.html"/>
+<link rel="prev" href="delta-an-attempt-at-a-package.html"/>
+<link rel="next" href="foxtrot-build-time-vs.-run-time.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -352,20 +352,77 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="licensing" class="section level1 hasAnchor">
-<h1><span class="header-section-number">Chapter 9</span> Licensing<a href="licensing.html#licensing" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p><strong>Learning objectives:</strong></p>
+<div id="echo-a-working-package" class="section level2 hasAnchor">
+<h2><span class="header-section-number">6.5</span> Echo: a working package<a href="echo-a-working-package.html#echo-a-working-package" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Now we’ll make a package that actually works:</p>
+<pre><code>lookup_table &lt;- dplyr::tribble(
+      ~where, ~english,
+     &quot;beach&quot;,     &quot;US&quot;,
+     &quot;coast&quot;,     &quot;US&quot;,
+  &quot;seashore&quot;,     &quot;UK&quot;,
+   &quot;seaside&quot;,     &quot;UK&quot;
+)
+
+#&#39; @export
+localize_beach &lt;- function(dat) {
+  dplyr::left_join(dat, lookup_table)
+}
+
+f_to_c &lt;- function(x) (x - 32) * 5/9
+
+#&#39; @export
+celsify_temp &lt;- function(dat) {
+  dplyr::mutate(dat, temp = dplyr::if_else(english == &quot;US&quot;, f_to_c(temp), temp))
+}
+
+now &lt;- Sys.time()
+timestamp &lt;- function(time) format(time, &quot;%Y-%B-%d_%H-%M-%S&quot;)
+
+#&#39; @export
+outfile_path &lt;- function(infile) {
+  paste0(timestamp(now), &quot;_&quot;, sub(&quot;(.*)([.]csv$)&quot;, &quot;\\1_clean\\2&quot;, infile))
+}</code></pre>
+<p><strong>Note:</strong> To fix our initial problem with loading a CSV file, we’ve created lookup_table to create a data frame instead. However, Chapter 14 provides more guidance and recommendations on how to load datasets properly.</p>
+<p><strong>Other Note:</strong> When calling functions from other packages, we should specify the package that we’re using (e.g., dplyr::mutate()). Moreover, we should identify the specific package being used, rather than the meta-package (e.g., do not use tidyverse::mutate())</p>
 <ul>
-<li>THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY</li>
+<li>All of the user-facing functions have an <code>@export</code> tag in their roxygen comment, which means that devtools::document() adds them correctly to the NAMESPACE file.</li>
 </ul>
+<p>This package can be installed, but we receive 1 note and 1 warning:</p>
+<pre><code>* checking R code for possible problems ... NOTE
+celsify_temp: no visible binding for global variable ‘english’
+celsify_temp: no visible binding for global variable ‘temp’
+Undefined global functions or variables:
+  english temp
+
+* checking for missing documentation entries ... WARNING
+Undocumented code objects:
+  ‘celsify_temp’ ‘localize_beach’ ‘outfile_path’
+All user-level objects in a package should have documentation entries.
+See chapter ‘Writing R documentation files’ in the ‘Writing R
+Extensions’ manual.</code></pre>
+<p>Translation of first warnings: <code>no visible binding for global variable ‘english’</code> and <code>no visible binding for global variable ‘temp’</code></p>
+<ul>
+<li>Using bare variable names like english and temp looks suspicious because you’re using unquoted variable names from dplyr inside a package.
+<ul>
+<li>defining these variables globally eliminates the note:</li>
+</ul></li>
+</ul>
+<pre><code>option 1 (then you should also put utils in Imports)
+utils::globalVariables(c(&quot;english&quot;, &quot;temp&quot;))
+
+option 2
+english &lt;- temp &lt;- NULL</code></pre>
+<p>The other note we received from R:</p>
+<p><code>"Undocumented code objects: ‘celsify_temp’ ‘localize_beach’ ‘outfile_path’ All user-level objects in a package should have documentation entries."</code></p>
+<p>This is caused by not documenting exported functions. Using roxygen comments to document it should solve the problem.</p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="meeting-videos-5.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="slide-1-2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="delta-an-attempt-at-a-package.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="foxtrot-build-time-vs.-run-time.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -396,7 +453,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/09.Rmd",
+"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/06-the-package-within.Rmd",
 "text": "Edit"
 },
 "history": {

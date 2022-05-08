@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 9 Licensing | R Packages Book Club</title>
+  <title>6.6 Foxtrot: build time vs. run time | R Packages Book Club</title>
   <meta name="description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 9 Licensing | R Packages Book Club" />
+  <meta property="og:title" content="6.6 Foxtrot: build time vs. run time | R Packages Book Club" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="github-repo" content="r4ds/bookclub-rpkgs" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 9 Licensing | R Packages Book Club" />
+  <meta name="twitter:title" content="6.6 Foxtrot: build time vs. run time | R Packages Book Club" />
   
   <meta name="twitter:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="meeting-videos-5.html"/>
-<link rel="next" href="slide-1-2.html"/>
+<link rel="prev" href="echo-a-working-package.html"/>
+<link rel="next" href="golf-side-effects.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -352,20 +352,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="licensing" class="section level1 hasAnchor">
-<h1><span class="header-section-number">Chapter 9</span> Licensing<a href="licensing.html#licensing" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p><strong>Learning objectives:</strong></p>
-<ul>
-<li>THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY</li>
-</ul>
+<div id="foxtrot-build-time-vs.-run-time" class="section level2 hasAnchor">
+<h2><span class="header-section-number">6.6</span> Foxtrot: build time vs. run time<a href="foxtrot-build-time-vs.-run-time.html#foxtrot-build-time-vs.-run-time" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Another problem: For this package, the timestamps don’t seem to work properly..</p>
+<pre><code>Sys.time()
+#&gt; [1] &quot;2022-02-24 20:49:59 PST&quot;
+
+outfile_path(&quot;INFILE.csv&quot;)
+#&gt; [1] &quot;2020-September-03_11-06-33_INFILE_clean.csv&quot;</code></pre>
+<p>The timestamp reflects the time that the function was initially run, rather than the current time.</p>
+<p><strong>Source of the problem:</strong> The <code>Sys.time()</code> function outside the <code>outfile_path</code> definition. The <code>Sys.time</code> is executed when the package is built, but never again. <em>Code outside your functions is only built once at build time.</em></p>
+<p>Moving <code>Sys.time</code> so that it’s no longer top level code:</p>
+<pre><code># always timestamp as &quot;now&quot;
+outfile_path &lt;- function(infile) {
+  ts &lt;- timestamp(Sys.time())
+  paste0(ts, &quot;_&quot;, sub(&quot;(.*)([.]csv$)&quot;, &quot;\\1_clean\\2&quot;, infile))
+}
+
+# allow user to provide a time, but default to &quot;now&quot;
+outfile_path &lt;- function(infile, time = Sys.time()) {
+  ts &lt;- timestamp(time)
+  paste0(ts, &quot;_&quot;, sub(&quot;(.*)([.]csv$)&quot;, &quot;\\1_clean\\2&quot;, infile))
+}</code></pre>
+<p><strong>Takeaway:</strong> Need to have a different mindset when defining objects for a package. The objects should be functions and these functions should (generally) only use data they create or that is passed via an argument.</p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="meeting-videos-5.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="slide-1-2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="echo-a-working-package.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="golf-side-effects.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -396,7 +413,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/09.Rmd",
+"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/06-the-package-within.Rmd",
 "text": "Edit"
 },
 "history": {

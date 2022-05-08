@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 9 Licensing | R Packages Book Club</title>
+  <title>6.1 Alfa: a script that works | R Packages Book Club</title>
   <meta name="description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 9 Licensing | R Packages Book Club" />
+  <meta property="og:title" content="6.1 Alfa: a script that works | R Packages Book Club" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   <meta name="github-repo" content="r4ds/bookclub-rpkgs" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 9 Licensing | R Packages Book Club" />
+  <meta name="twitter:title" content="6.1 Alfa: a script that works | R Packages Book Club" />
   
   <meta name="twitter:description" content="This is the product of the R4DS Online Learning Community’s R Packages Book Club." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="meeting-videos-5.html"/>
-<link rel="next" href="slide-1-2.html"/>
+<link rel="prev" href="the-package-within.html"/>
+<link rel="next" href="bravo-a-better-script-that-works.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -352,20 +352,54 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="licensing" class="section level1 hasAnchor">
-<h1><span class="header-section-number">Chapter 9</span> Licensing<a href="licensing.html#licensing" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p><strong>Learning objectives:</strong></p>
-<ul>
-<li>THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY</li>
-</ul>
+<div id="alfa-a-script-that-works" class="section level2 hasAnchor">
+<h2><span class="header-section-number">6.1</span> Alfa: a script that works<a href="alfa-a-script-that-works.html#alfa-a-script-that-works" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A fictional script for a dataset of people who went for a swim.</p>
+<blockquote>
+<p>Where did you swim and how hot was it outside?</p>
+</blockquote>
+<pre><code>infile &lt;- &quot;swim.csv&quot;
+(dat &lt;- read.csv(infile))
+#&gt;   name    where temp
+#&gt; 1 Adam    beach   95
+#&gt; 2 Bess    coast   91
+#&gt; 3 Cora seashore   28
+#&gt; 4 Dale    beach   85
+#&gt; 5 Evan  seaside   31</code></pre>
+<ol style="list-style-type: decimal">
+<li>Observations were classified as American or British based on how they described the beach:</li>
+</ol>
+<pre><code>dat$english[dat$where == &quot;beach&quot;] &lt;- &quot;US&quot;
+dat$english[dat$where == &quot;coast&quot;] &lt;- &quot;US&quot;
+dat$english[dat$where == &quot;seashore&quot;] &lt;- &quot;UK&quot;
+dat$english[dat$where == &quot;seaside&quot;] &lt;- &quot;UK&quot;</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Temperatures were converted to Celsius:</li>
+</ol>
+<pre><code>dat$temp[dat$english == &quot;US&quot;] &lt;- (dat$temp[dat$english == &quot;US&quot;] - 32) * 5/9
+dat
+#&gt;   name    where temp english
+#&gt; 1 Adam    beach 35.0      US
+#&gt; 2 Bess    coast 32.8      US
+#&gt; 3 Cora seashore 28.0      UK
+#&gt; 4 Dale    beach 29.4      US
+#&gt; 5 Evan  seaside 31.0      UK</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Data is written back to a csv file. A timestamp is also captured in the filename.</li>
+</ol>
+<pre><code>now &lt;- Sys.time()
+timestamp &lt;- format(now, &quot;%Y-%B-%d_%H-%M-%S&quot;)
+(outfile &lt;- paste0(timestamp, &quot;_&quot;, sub(&quot;(.*)([.]csv$)&quot;, &quot;\\1_clean\\2&quot;, infile)))
+#&gt; [1] &quot;2022-April-17_07-14-16_swim_clean.csv&quot;
+write.csv(dat, file = outfile, quote = FALSE, row.names = FALSE)</code></pre>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="meeting-videos-5.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="slide-1-2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="the-package-within.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="bravo-a-better-script-that-works.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -396,7 +430,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/09.Rmd",
+"link": "https://github.com/r4ds/bookclub-rpkgs/edit/main/06-the-package-within.Rmd",
 "text": "Edit"
 },
 "history": {

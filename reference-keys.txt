@@ -8,6 +8,7 @@ installing-packages
 why-develop-packages
 philosophy-behind-the-tools-of-r-package-development
 what-if-we-need-more-detail
+what-we-wont-learn
 a-note
 meeting-videos
 cohort-1

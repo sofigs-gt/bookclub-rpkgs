@@ -14,6 +14,7 @@ meeting-videos
 cohort-1
 cohort-2
 cohort-3
+cohort-4
 the-whole-game
 warmupice-breaker
 a-few-reminders
@@ -41,6 +42,7 @@ meeting-videos-1
 cohort-1-1
 cohort-2-1
 cohort-3-1
+cohort-4-1
 system-setup
 prepare-your-system
 devtools-usethis-and-you
@@ -83,7 +85,7 @@ test-driving-a-package
 using-load_all
 using-test
 coping-with-being-impatient
-my-bad-habit
+previous-speakers-bad-habit
 meeting-videos-4
 cohort-1-4
 cohort-2-4

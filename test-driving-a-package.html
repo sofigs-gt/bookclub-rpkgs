@@ -23,7 +23,7 @@
 <meta name="author" content="The R4DS Online Learning Community" />
 
 
-<meta name="date" content="2022-10-06" />
+<meta name="date" content="2022-10-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -163,6 +163,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.8.1" data-path="meeting-videos.html"><a href="meeting-videos.html#cohort-1"><i class="fa fa-check"></i><b>1.8.1</b> Cohort 1</a></li>
 <li class="chapter" data-level="1.8.2" data-path="meeting-videos.html"><a href="meeting-videos.html#cohort-2"><i class="fa fa-check"></i><b>1.8.2</b> Cohort 2</a></li>
 <li class="chapter" data-level="1.8.3" data-path="meeting-videos.html"><a href="meeting-videos.html#cohort-3"><i class="fa fa-check"></i><b>1.8.3</b> Cohort 3</a></li>
+<li class="chapter" data-level="1.8.4" data-path="meeting-videos.html"><a href="meeting-videos.html#cohort-4"><i class="fa fa-check"></i><b>1.8.4</b> Cohort 4</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="the-whole-game.html"><a href="the-whole-game.html"><i class="fa fa-check"></i><b>2</b> The whole game</a>
@@ -196,6 +197,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.20.1" data-path="meeting-videos-1.html"><a href="meeting-videos-1.html#cohort-1-1"><i class="fa fa-check"></i><b>2.20.1</b> Cohort 1</a></li>
 <li class="chapter" data-level="2.20.2" data-path="meeting-videos-1.html"><a href="meeting-videos-1.html#cohort-2-1"><i class="fa fa-check"></i><b>2.20.2</b> Cohort 2</a></li>
 <li class="chapter" data-level="2.20.3" data-path="meeting-videos-1.html"><a href="meeting-videos-1.html#cohort-3-1"><i class="fa fa-check"></i><b>2.20.3</b> Cohort 3</a></li>
+<li class="chapter" data-level="2.20.4" data-path="meeting-videos-1.html"><a href="meeting-videos-1.html#cohort-4-1"><i class="fa fa-check"></i><b>2.20.4</b> Cohort 4</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="system-setup.html"><a href="system-setup.html"><i class="fa fa-check"></i><b>3</b> System setup</a>
@@ -260,7 +262,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.7.1" data-path="test-driving-a-package.html"><a href="test-driving-a-package.html#using-load_all"><i class="fa fa-check"></i><b>5.7.1</b> Using <code>load_all()</code></a></li>
 <li class="chapter" data-level="5.7.2" data-path="test-driving-a-package.html"><a href="test-driving-a-package.html#using-test"><i class="fa fa-check"></i><b>5.7.2</b> Using <code>test()</code></a></li>
 <li class="chapter" data-level="5.7.3" data-path="test-driving-a-package.html"><a href="test-driving-a-package.html#coping-with-being-impatient"><i class="fa fa-check"></i><b>5.7.3</b> Coping with being impatient</a></li>
-<li class="chapter" data-level="5.7.4" data-path="test-driving-a-package.html"><a href="test-driving-a-package.html#my-bad-habit"><i class="fa fa-check"></i><b>5.7.4</b> My (bad) habit</a></li>
+<li class="chapter" data-level="5.7.4" data-path="test-driving-a-package.html"><a href="test-driving-a-package.html#previous-speakers-bad-habit"><i class="fa fa-check"></i><b>5.7.4</b> (Previous speaker’s) bad habit</a></li>
 </ul></li>
 <li class="chapter" data-level="5.8" data-path="meeting-videos-4.html"><a href="meeting-videos-4.html"><i class="fa fa-check"></i><b>5.8</b> Meeting Videos</a>
 <ul>
@@ -571,7 +573,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="using-load_all" class="section level3 hasAnchor" number="5.7.1">
 <h3><span class="header-section-number">5.7.1</span> Using <code>load_all()</code><a href="test-driving-a-package.html#using-load_all" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Running <code>load_all()</code> is the fastest way to re-load the functions in your package as if you had installed it and run <code>library(pkgName)</code>. It is <em>MUCH</em> faster than <code>install()</code> (especially if you have compiled code in the package - show edits in DSSP).</p>
+<p>Running <code>load_all()</code> is the fastest way to re-load the functions in your package – much faster than installing it (<code>install.packages(pkgName)</code>) and loading it into memory <code>library(pkgName)</code>. <strong>This is helpful for iteratively updating or tweaking functions you’re working on</strong>.</p>
 </div>
 <div id="using-test" class="section level3 hasAnchor" number="5.7.2">
 <h3><span class="header-section-number">5.7.2</span> Using <code>test()</code><a href="test-driving-a-package.html#using-test" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -584,8 +586,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>To test examples in your documentation without running <code>check()</code>:
 <code>run_examples()</code></p>
 </div>
-<div id="my-bad-habit" class="section level3 hasAnchor" number="5.7.4">
-<h3><span class="header-section-number">5.7.4</span> My (bad) habit<a href="test-driving-a-package.html#my-bad-habit" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="previous-speakers-bad-habit" class="section level3 hasAnchor" number="5.7.4">
+<h3><span class="header-section-number">5.7.4</span> (Previous speaker’s) bad habit<a href="test-driving-a-package.html#previous-speakers-bad-habit" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>I like to have a <code>working_space.Rmd</code> in the package directory which I use to test package code away from the console. You’ll get a NOTE on the check:</p>
 <blockquote>
 <p>N checking top-level files …</p>
